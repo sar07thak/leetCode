@@ -16,7 +16,6 @@ const register = async (req, res) => {
       firstName,
       emailId,
       password: req.body.password,
-      role: "user",
     });
 
     const token = jwt.sign(
@@ -24,7 +23,7 @@ const register = async (req, res) => {
         firstName: firstName,
         emailId: emailId,
         _id: newUser._id,
-        role: "user",
+        role: newUser.role,
       },
       process.env.JWTKEY,
       { expiresIn: 3600 }
@@ -73,26 +72,48 @@ const logout = async (req, res) => {
   }
 };
 
-// const adminRegister = async (req, res) => {
-//    try{
-//         validate(req.body);
-//         const {firstName, emailId, password}  = req.body;
 
-//         req.body.password = await bcrypt.hash(password, 10);
+const adminRegister = async (req, res) => {
+  try {
+    // validate(req.body);
+    console.log("req.body:", req.body); // DEBUG LINE
+    if (!req.body || Object.keys(req.body).length === 0) {
+       return res.status(400).send("Bad Request: Request body is empty");
+    }
 
-//        const user =  await user.create(req.body);
-//        const token =  jwt.sign({_id:user._id , emailId:emailId, role:user.role},process.env.JWTKEY,{expiresIn: 60*60});
-//        res.cookie('token',token,{maxAge: 60*60*1000});
-//        res.status(201).send("User Registered Successfully");
-//       }
-//       catch(err){
-//           res.status(400).send("Error: "+err);
-//       }
-// };
+    const { firstName, emailId, password } = req.body;
+
+    req.body.password = await bcrypt.hash(password, 10);
+    req.body.role = "admin";
+    const newUser = await user.create({
+      firstName,
+      emailId,
+      password: req.body.password,
+      role: "admin",
+    });
+
+    const token = jwt.sign(
+      {
+        firstName: firstName,
+        emailId: emailId,
+        _id: newUser._id,
+        role: newUser.role,
+      },
+      process.env.JWTKEY,
+      { expiresIn: 3600 }
+    );
+    res
+      .status(201)
+      .cookie("token", token)
+      .send("admin register sucessfully ! ");
+  } catch (err) {
+    res.status(400).send("Error: " + err.message);
+  }
+};
 
 module.exports = {
   register,
   login,
   logout,
-  // adminRegister,
+  adminRegister,
 };

@@ -43,7 +43,6 @@
 
 // module.exports = adminMiddleware;
 
-
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const redisClient = require("../config/redis");
@@ -76,14 +75,6 @@ async function adminMiddleware(req, res, next) {
     if (payload.role !== "admin") {
       throw new Error("Invalid Token: Not an admin");
     }
-
-    // ✅ Redis token check — check if token is in Redis (i.e., valid session)
-    const isBlocked = await redisClient.exists(`token:${token}`);
-    if (!isBlocked) {
-      throw new Error("Invalid token: Not found in Redis");
-    }
-
-    // Attach user to request object
     req.result = result;
     next();
   } catch (err) {
