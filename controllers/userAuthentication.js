@@ -2,7 +2,6 @@ const user = require("../models/user"); //* user-model-schema
 const validate = require("../utils/validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const redisClient = require("../config/redis");
 
 const register = async (req, res) => {
   try {
