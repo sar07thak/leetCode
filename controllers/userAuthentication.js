@@ -71,7 +71,6 @@ const logout = async (req, res) => {
   }
 };
 
-
 const adminRegister = async (req, res) => {
   try {
     // validate(req.body);
