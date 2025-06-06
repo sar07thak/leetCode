@@ -5,6 +5,8 @@ const main = require("./config/db");
 
 const cookieParser = require("cookie-parser");
 const userRouters = require("./routes/userRoutes");
+const problemRouters = require("./routes/problemCreator");
+
 
 app.use(express.json());
 app.use(cookieParser());
@@ -12,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // ✅ Routes
 app.use("/user", userRouters);
+app.use("/problem" , problemRouters);
 
 // ✅ Connect DB and start server
 main().then(() => {
