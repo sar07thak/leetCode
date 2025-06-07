@@ -5,16 +5,21 @@ const express = require("express");
 const Problem = require("../models/problem");
 const router = express.Router();
 const adminMiddleware = require("../middleware/adminMiddleware");
-const  createProblem  = require("../controllers/userProblem");
+const  {createProblem , updateProblem , deleteProblem ,
+    getAllProblem ,getProblemByID ,solvedProblemByUser
+}  = require("../controllers/userProblem");
+const userMiddleware = require("../middleware/userMiddleware");
 
 
+//* Admin specific api requests
 router.post("/create", adminMiddleware , createProblem);
-// router.patch("/:id", updateProblem);
-// router.delete("/:id", deleteProblem);
+router.put("/update/:id", adminMiddleware , updateProblem);
+router.delete("/delete/:id", adminMiddleware , deleteProblem);
 
-// router.get("/:id", getProblemByID);
-// router.get("/", getAllProblem);
-// router.get("/user", solvedProblemByUser);
+//* User specific api requests
+router.get("/problemById/:id", userMiddleware , getProblemByID);
+router.get("/getAllProblem", userMiddleware ,  getAllProblem);
+router.get("/problemSolvedByUser", userMiddleware , solvedProblemByUser);
 
 
 module.exports = router ;
