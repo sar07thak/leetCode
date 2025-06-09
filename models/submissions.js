@@ -39,11 +39,11 @@ const submissionSchema = new Schema({
     default : ''
   } ,
   testCaseTotal  : {
-    type : Number , // in kb
+    type : Number , 
     default : 0 
   } ,
    testCasePassed : {
-    type : Number , // in kb
+    type : Number , 
     default : 0 
   } 
 }, { timestamps: true });

@@ -36,8 +36,15 @@ const userSchema = new Schema({
     default: "user",
     required : true
   },
-  problemSolved: [String],
-}, { timestamps: true });
+  problemSolved : {
+      type : [{
+          type : Schema.Types.ObjectId ,
+          ref : 'problem'
+      }] ,
+      unique : true 
+    }
+},
+ { timestamps: true });
 
 const User = mongoose.model("User", userSchema);
 

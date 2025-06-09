@@ -20,4 +20,5 @@ router.post("/logout", logout);
 router.post("/admin/register", adminMiddleware , adminRegister);
 
 
+
 module.exports = router;
