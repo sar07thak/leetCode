@@ -1,4 +1,5 @@
 const user = require("../models/user"); //* user-model-schema
+const submissions = require("../models/submissions") //* submission schema
 const validate = require("../utils/validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -76,7 +77,7 @@ const adminRegister = async (req, res) => {
     // validate(req.body);
     console.log("req.body:", req.body); // DEBUG LINE
     if (!req.body || Object.keys(req.body).length === 0) {
-       return res.status(400).send("Bad Request: Request body is empty");
+      return res.status(400).send("Bad Request: Request body is empty");
     }
 
     const { firstName, emailId, password } = req.body;
@@ -109,9 +110,26 @@ const adminRegister = async (req, res) => {
   }
 };
 
+const deleteProfile = async (req, res) => {
+  try {
+    const userId = req.result._id ;
+
+    //! deletion from userSchema and users List 
+    await user.findByIdAndDelete(userId) ;
+    
+    //!  now we have to delete from Submission whatever user sumbit in submissions
+    await submissions.deleteMany({userId});
+
+    res.status(200).send("Deleted sucessfully :-)");
+  } catch (err) {
+    res.status(404).send("Error : " + err.message);
+  }
+};
+
 module.exports = {
   register,
   login,
   logout,
   adminRegister,
+  deleteProfile,
 };

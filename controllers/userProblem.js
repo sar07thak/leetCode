@@ -5,6 +5,8 @@ const {
 } = require("../utils/ProblemUtility");
 const Problem = require("../models/problem");
 const User = require("../models/user");
+const submission = require("../models/submissions")
+
 
 const createProblem = async (req, res) => {
   try {
@@ -213,6 +215,26 @@ const solvedProblemByUser = async (req, res) => {
   }
 };
 
+
+const solvedProblem = async ( req , res ) => {
+  try{
+    const userId = req.result._id ;
+    const problemID = req.params.pid ;
+
+    const ans  = await submission.find({ userId , problemID });
+
+
+    if( ans.length == 0 ){
+      return res.status(200).send("No submission is present ! ");
+    }
+
+    res.status(200).send(ans);
+
+  }catch(err){
+    res.status(400).send("Error : " + err.message );
+  }
+}
+
 module.exports = {
   createProblem,
   deleteProblem,
@@ -220,6 +242,7 @@ module.exports = {
   getAllProblem,
   getProblemByID,
   solvedProblemByUser,
+  solvedProblem
 };
 
 //* inside a test result
